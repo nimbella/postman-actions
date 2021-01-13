@@ -35,114 +35,38 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __asyncValues = (this && this.__asyncValues) || function (o) {
-    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var m = o[Symbol.asyncIterator], i;
-    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
-    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
-};
-var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
-var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
-    var i, p;
-    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
-};
-var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
-    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
-    function fulfill(value) { resume("next", value); }
-    function reject(value) { resume("throw", value); }
-    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var __values = (this && this.__values) || function(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-    if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
 exports.__esModule = true;
-var invoker_1 = require("@nimbella/postman-api/lib/invoker");
 var path_1 = require("path");
-// import { runNimCommand } from 'nimbella-cli'
+var invoker_1 = require("@nimbella/postman-api/lib/invoker");
 var nimbella_deployer_1 = require("nimbella-deployer");
-// import { Flags, deployProject, fileSystemPersister, getCredentialsFromEnvironment } from 'nimbella-cli/lib/deployer'
-var readdir = require('fs').promises.readdir;
 function main(args) {
     return __awaiter(this, void 0, void 0, function () {
         var error_1;
-        var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 3, , 4]);
-                    console.log('---------------------args---------------------');
-                    console.log(JSON.stringify(args, null, 4));
-                    // console.log('---------------------args.__ow_headers---------------------');
-                    // console.log(args.__ow_headers);
+                    _a.trys.push([0, 5, , 6]);
+                    if (!(args.collection && args.pm_api_key && args.nim_auth_token)) return [3 /*break*/, 3];
                     return [4 /*yield*/, nimGenerate(args.collection, args.pm_api_key)];
                 case 1:
-                    // console.log('---------------------args.__ow_headers---------------------');
-                    // console.log(args.__ow_headers);
                     _a.sent();
-                    console.log('---------------------generated---------------------');
                     return [4 /*yield*/, nimProjectDeploy(args.collection, args.nim_auth_token)];
                 case 2:
                     _a.sent();
-                    console.log('cwd' + process.cwd());
-                    ;
-                    (function () { return __awaiter(_this, void 0, void 0, function () {
-                        var _a, _b, f, e_1_1;
-                        var e_1, _c;
-                        return __generator(this, function (_d) {
-                            switch (_d.label) {
-                                case 0:
-                                    _d.trys.push([0, 5, 6, 11]);
-                                    _a = __asyncValues(getFiles(path_1.join(process.cwd(), args.collection)));
-                                    _d.label = 1;
-                                case 1: return [4 /*yield*/, _a.next()];
-                                case 2:
-                                    if (!(_b = _d.sent(), !_b.done)) return [3 /*break*/, 4];
-                                    f = _b.value;
-                                    console.log(f);
-                                    _d.label = 3;
-                                case 3: return [3 /*break*/, 1];
-                                case 4: return [3 /*break*/, 11];
-                                case 5:
-                                    e_1_1 = _d.sent();
-                                    e_1 = { error: e_1_1 };
-                                    return [3 /*break*/, 11];
-                                case 6:
-                                    _d.trys.push([6, , 9, 10]);
-                                    if (!(_b && !_b.done && (_c = _a["return"]))) return [3 /*break*/, 8];
-                                    return [4 /*yield*/, _c.call(_a)];
-                                case 7:
-                                    _d.sent();
-                                    _d.label = 8;
-                                case 8: return [3 /*break*/, 10];
-                                case 9:
-                                    if (e_1) throw e_1.error;
-                                    return [7 /*endfinally*/];
-                                case 10: return [7 /*endfinally*/];
-                                case 11: return [2 /*return*/];
-                            }
-                        });
-                    }); })();
-                    return [3 /*break*/, 4];
-                case 3:
+                    return [2 /*return*/, {
+                            body: args.collection + " Deployed!"
+                        }];
+                case 3: return [2 /*return*/, {
+                        body: "Missing required parameters."
+                    }];
+                case 4: return [3 /*break*/, 6];
+                case 5:
                     error_1 = _a.sent();
                     console.error(error_1);
-                    return [2 /*return*/, error_1];
-                case 4: return [2 /*return*/];
+                    return [2 /*return*/, {
+                            body: error_1.message
+                        }];
+                case 6: return [2 /*return*/];
             }
         });
     });
@@ -153,12 +77,10 @@ function nimGenerate(collection, pm_api_key) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log('collection:-' + collection);
-                    console.log('pm_api_key:-' + pm_api_key);
                     generator = new invoker_1["default"]({
                         id: collection,
                         key: pm_api_key,
-                        language: 'ts',
+                        language: "ts",
                         overwrite: true,
                         deploy: false,
                         deployForce: false,
@@ -168,8 +90,7 @@ function nimGenerate(collection, pm_api_key) {
                         init: false
                     });
                     return [4 /*yield*/, generator.generate()["catch"](function (error) {
-                            console.log('Oops! Some Error Occurred, Please Try Again');
-                            console.error(error);
+                            throw new Error(error.message);
                         })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
@@ -195,61 +116,15 @@ function nimProjectDeploy(collection, nim_auth_token) {
                         exclude: undefined,
                         remoteBuild: false
                     };
-                    return [4 /*yield*/, nimbella_deployer_1.doLogin(nim_auth_token, nimbella_deployer_1.fileSystemPersister)
-                        // const cred = getCredentialsFromEnvironment()
-                    ];
+                    return [4 /*yield*/, nimbella_deployer_1.doLogin(nim_auth_token, nimbella_deployer_1.fileSystemPersister)["catch"](function (error) {
+                            throw new Error(error.message);
+                        })];
                 case 1:
                     cred = _a.sent();
-                    // const cred = getCredentialsFromEnvironment()
-                    console.log('--------------cred--------------');
-                    console.log(cred);
-                    return [4 /*yield*/, nimbella_deployer_1.deployProject(projPath, cred.ow, cred, nimbella_deployer_1.fileSystemPersister, flags)];
+                    return [4 /*yield*/, nimbella_deployer_1.deployProject(projPath, cred.ow, cred, nimbella_deployer_1.fileSystemPersister, flags)["catch"](function (error) {
+                            throw new Error(error.message);
+                        })];
                 case 2: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
-// async function loginUsingToken(token: string) {
-//   await runNimCommand('auth/login', [token]);
-// }
-// async function getNamespace() {
-//   try {
-//     const res = await runNimCommand('auth/current',[]);
-//     return res.captured[0];
-//   } catch (e) {
-//     console.log('getNamespace Error:', e.message);
-//     return { error: e.message };
-//   }
-// }
-function getFiles(dir) {
-    return __asyncGenerator(this, arguments, function getFiles_1() {
-        var dirents, _i, dirents_1, dirent, res;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, __await(readdir(dir, { withFileTypes: true }))];
-                case 1:
-                    dirents = _a.sent();
-                    _i = 0, dirents_1 = dirents;
-                    _a.label = 2;
-                case 2:
-                    if (!(_i < dirents_1.length)) return [3 /*break*/, 9];
-                    dirent = dirents_1[_i];
-                    res = path_1.resolve(dir, dirent.name);
-                    if (!dirent.isDirectory()) return [3 /*break*/, 5];
-                    return [5 /*yield**/, __values(__asyncDelegator(__asyncValues(getFiles(res))))];
-                case 3: return [4 /*yield*/, __await.apply(void 0, [_a.sent()])];
-                case 4:
-                    _a.sent();
-                    return [3 /*break*/, 8];
-                case 5: return [4 /*yield*/, __await(res)];
-                case 6: return [4 /*yield*/, _a.sent()];
-                case 7:
-                    _a.sent();
-                    _a.label = 8;
-                case 8:
-                    _i++;
-                    return [3 /*break*/, 2];
-                case 9: return [2 /*return*/];
             }
         });
     });

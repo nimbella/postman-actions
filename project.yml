@@ -1,0 +1,32 @@
+bucket:
+  strip: 1
+
+packages:
+
+  - name: collections
+    actions:
+      - name: create
+        environment: $(POSTMAN_API_KEY)      
+      - name: update
+        environment: $(POSTMAN_API_KEY)      
+      - name: delete
+        environment: $(POSTMAN_API_KEY)      
+      - name: getAll
+        environment: $(POSTMAN_API_KEY)      
+      - name: getSingle
+        environment: $(POSTMAN_API_KEY)      
+      - name: fork
+        environment: $(POSTMAN_API_KEY)      
+      - name: merge
+        environment: $(POSTMAN_API_KEY)      
+        
+  - name: project
+    actions:
+      - name: create        
+        runtime: nodejs:10
+        environment: $(POSTMAN_API_KEY)          
+      - name: deploy
+        runtime: nodejs:10
+        limits:
+          timeout: 10000
+          memory: 768
