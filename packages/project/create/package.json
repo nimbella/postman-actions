@@ -1,0 +1,9 @@
+{
+  "name": "create",
+  "version": "1.0.0",
+  "description": "Create Nimbella Project",
+  "main": "index.js",
+  "dependencies": {
+    "generator": "file:./nimbella-plugin-postman-0.1.2.tgz"
+  }
+}
