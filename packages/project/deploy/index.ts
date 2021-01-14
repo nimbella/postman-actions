@@ -1,4 +1,5 @@
 import { join } from "path";
+import { existsSync } from "fs";
 import { default as Generate } from "@nimbella/postman-api/lib/invoker";
 import {
   Flags,
@@ -10,13 +11,8 @@ import {
 async function main(args: any) {
   try {
     if (args.collection && args.pm_api_key && args.nim_auth_token) {
-      console.log('-----------------collection name-----------------');
-      console.log(args.collection );    
-      console.log('-----------------generating-----------------');
       await nimGenerate(args.collection, args.pm_api_key);
-      console.log('-----------------generated-----------------');
       await nimProjectDeploy(args.collection, args.nim_auth_token);
-      console.log('-----------------deployed-----------------');
       return {
         body: `${args.collection} Deployed!`,
       };
@@ -37,7 +33,7 @@ async function nimGenerate(collection: string, pm_api_key: string) {
   const generator = new Generate({
     id: collection,
     key: pm_api_key,
-    language: "ts",
+    language: "js",
     overwrite: true,
     deploy: false,
     deployForce: false,
@@ -53,6 +49,11 @@ async function nimGenerate(collection: string, pm_api_key: string) {
 
 async function nimProjectDeploy(collection: string, nim_auth_token: string) {
   const projPath = join(process.cwd(), collection);
+  console.log(`___________projPath___________`);
+  console.log(projPath);
+  if (!existsSync(projPath)) {
+    throw new Error(`Couldn't find project for ${collection}`);
+  }
   const flags: Flags = {
     verboseBuild: true,
     verboseZip: false,
@@ -71,9 +72,8 @@ async function nimProjectDeploy(collection: string, nim_auth_token: string) {
     }
   );
   console.log(`___________cred___________`);
-  console.log(cred);
-  console.log(`___________projPath___________`);
-  console.log(projPath);
+  console.log(JSON.stringify(cred, null, 4));
+
   return deployProject(
     projPath,
     cred.ow,

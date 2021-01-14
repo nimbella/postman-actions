@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var path_1 = require("path");
+var fs_1 = require("fs");
 var invoker_1 = require("@nimbella/postman-api/lib/invoker");
 var nimbella_deployer_1 = require("nimbella-deployer");
 function main(args) {
@@ -57,7 +58,7 @@ function main(args) {
                             body: args.collection + " Deployed!"
                         }];
                 case 3: return [2 /*return*/, {
-                        body: "Missing required parameters."
+                        body: "Missing required parameters"
                     }];
                 case 4: return [3 /*break*/, 6];
                 case 5:
@@ -75,25 +76,21 @@ function nimGenerate(collection, pm_api_key) {
     return __awaiter(this, void 0, void 0, function () {
         var generator;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    generator = new invoker_1["default"]({
-                        id: collection,
-                        key: pm_api_key,
-                        language: "ts",
-                        overwrite: true,
-                        deploy: false,
-                        deployForce: false,
-                        updateSource: false,
-                        clientCode: false,
-                        update: false,
-                        init: false
-                    });
-                    return [4 /*yield*/, generator.generate()["catch"](function (error) {
-                            throw new Error(error.message);
-                        })];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
+            generator = new invoker_1["default"]({
+                id: collection,
+                key: pm_api_key,
+                language: "js",
+                overwrite: true,
+                deploy: false,
+                deployForce: false,
+                updateSource: false,
+                clientCode: false,
+                update: false,
+                init: false
+            });
+            return [2 /*return*/, generator.generate()["catch"](function (error) {
+                    throw new Error(error.message);
+                })];
         });
     });
 }
@@ -104,8 +101,13 @@ function nimProjectDeploy(collection, nim_auth_token) {
             switch (_a.label) {
                 case 0:
                     projPath = path_1.join(process.cwd(), collection);
+                    console.log("___________projPath___________");
+                    console.log(projPath);
+                    if (!fs_1.existsSync(projPath)) {
+                        throw new Error("Couldn't find project for " + collection);
+                    }
                     flags = {
-                        verboseBuild: false,
+                        verboseBuild: true,
                         verboseZip: false,
                         production: false,
                         incremental: false,
@@ -121,10 +123,11 @@ function nimProjectDeploy(collection, nim_auth_token) {
                         })];
                 case 1:
                     cred = _a.sent();
-                    return [4 /*yield*/, nimbella_deployer_1.deployProject(projPath, cred.ow, cred, nimbella_deployer_1.fileSystemPersister, flags)["catch"](function (error) {
+                    console.log("___________cred___________");
+                    console.log(JSON.stringify(cred, null, 4));
+                    return [2 /*return*/, nimbella_deployer_1.deployProject(projPath, cred.ow, cred, nimbella_deployer_1.fileSystemPersister, flags)["catch"](function (error) {
                             throw new Error(error.message);
                         })];
-                case 2: return [2 /*return*/, _a.sent()];
             }
         });
     });
