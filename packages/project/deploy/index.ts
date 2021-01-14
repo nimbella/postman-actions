@@ -10,8 +10,13 @@ import {
 async function main(args: any) {
   try {
     if (args.collection && args.pm_api_key && args.nim_auth_token) {
+      console.log('-----------------collection name-----------------');
+      console.log(args.collection );    
+      console.log('-----------------generating-----------------');
       await nimGenerate(args.collection, args.pm_api_key);
+      console.log('-----------------generated-----------------');
       await nimProjectDeploy(args.collection, args.nim_auth_token);
+      console.log('-----------------deployed-----------------');
       return {
         body: `${args.collection} Deployed!`,
       };
@@ -41,7 +46,7 @@ async function nimGenerate(collection: string, pm_api_key: string) {
     update: false,
     init: false,
   });
-  return await generator.generate().catch((error) => {
+  return generator.generate().catch((error) => {
     throw new Error(error.message);
   });
 }
@@ -49,7 +54,7 @@ async function nimGenerate(collection: string, pm_api_key: string) {
 async function nimProjectDeploy(collection: string, nim_auth_token: string) {
   const projPath = join(process.cwd(), collection);
   const flags: Flags = {
-    verboseBuild: false,
+    verboseBuild: true,
     verboseZip: false,
     production: false,
     incremental: false,
@@ -65,7 +70,11 @@ async function nimProjectDeploy(collection: string, nim_auth_token: string) {
       throw new Error(error.message);
     }
   );
-  return await deployProject(
+  console.log(`___________cred___________`);
+  console.log(cred);
+  console.log(`___________projPath___________`);
+  console.log(projPath);
+  return deployProject(
     projPath,
     cred.ow,
     cred,
