@@ -1,6 +1,7 @@
 import { join } from "path";
 import { existsSync } from "fs";
 import { default as Generate } from "@nimbella/postman-api/lib/invoker";
+import { sanitizeName } from "@nimbella/postman-api/lib/utils";
 import {
   Flags,
   deployProject,
@@ -11,9 +12,11 @@ import {
 
 async function main(args: any) {
   try {
-    if (args.collection && args.pm_api_key && args.nim_auth_token) {
-      await nimGenerate(args.collection, args.pm_api_key)
-      const deployerResponse = await nimProjectDeploy(args.collection, args.nim_auth_token)
+    const api_key = args.__ow_headers['x-api-key']
+    const auth_token = args.__ow_headers['x-auth-token']
+    if (args.collection && api_key && auth_token) {
+      await nimProjectGenerate(args.collection, api_key)
+      const deployerResponse = await nimProjectDeploy(args.collection, auth_token)
       console.log(`___________deployerResponse___________`)
       console.log(deployerResponse);
       return {
@@ -32,7 +35,7 @@ async function main(args: any) {
   }
 }
 
-async function nimGenerate(collection: string, pm_api_key: string) {
+async function nimProjectGenerate(collection: string, pm_api_key: string) {
   const generator = new Generate({
     id: collection,
     key: pm_api_key,
@@ -51,7 +54,7 @@ async function nimGenerate(collection: string, pm_api_key: string) {
 }
 
 async function nimProjectDeploy(collection: string, nim_auth_token: string) {
-  const projPath = join(process.cwd(), collection)
+  const projPath = join(process.cwd(), sanitizeName(collection, '-'))
   console.log(`___________projPath___________`)
   console.log(projPath);
   if (!existsSync(projPath)) {

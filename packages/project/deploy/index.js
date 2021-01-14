@@ -39,19 +39,22 @@ exports.__esModule = true;
 var path_1 = require("path");
 var fs_1 = require("fs");
 var invoker_1 = require("@nimbella/postman-api/lib/invoker");
+var utils_1 = require("@nimbella/postman-api/lib/utils");
 var nimbella_deployer_1 = require("nimbella-deployer");
 function main(args) {
     return __awaiter(this, void 0, void 0, function () {
-        var deployerResponse, error_1;
+        var api_key, auth_token, deployerResponse, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 5, , 6]);
-                    if (!(args.collection && args.pm_api_key && args.nim_auth_token)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, nimGenerate(args.collection, args.pm_api_key)];
+                    api_key = args.__ow_headers['x-api-key'];
+                    auth_token = args.__ow_headers['x-auth-token'];
+                    if (!(args.collection && api_key && auth_token)) return [3 /*break*/, 3];
+                    return [4 /*yield*/, nimProjectGenerate(args.collection, api_key)];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, nimProjectDeploy(args.collection, args.nim_auth_token)];
+                    return [4 /*yield*/, nimProjectDeploy(args.collection, auth_token)];
                 case 2:
                     deployerResponse = _a.sent();
                     console.log("___________deployerResponse___________");
@@ -74,7 +77,7 @@ function main(args) {
         });
     });
 }
-function nimGenerate(collection, pm_api_key) {
+function nimProjectGenerate(collection, pm_api_key) {
     return __awaiter(this, void 0, void 0, function () {
         var generator;
         return __generator(this, function (_a) {
@@ -102,7 +105,7 @@ function nimProjectDeploy(collection, nim_auth_token) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    projPath = path_1.join(process.cwd(), collection);
+                    projPath = path_1.join(process.cwd(), utils_1.sanitizeName(collection, '-'));
                     console.log("___________projPath___________");
                     console.log(projPath);
                     if (!fs_1.existsSync(projPath)) {
