@@ -8,16 +8,29 @@ import {
   doLogin,
   fileSystemPersister,
   initializeAPI,
+  Credentials,
 } from "nimbella-deployer";
 
 async function main(args: any) {
   try {
-    const api_key = args.__ow_headers['x-api-key']
-    const auth_token = args.__ow_headers['x-auth-token']
+    const api_key = args.__ow_headers["x-api-key"];
+    const auth_token = args.__ow_headers["x-auth-token"];
+
     if (args.collection && api_key && auth_token) {
-      await nimProjectGenerate(args.collection, api_key)
-      const deployerResponse = await nimProjectDeploy(args.collection, auth_token)
-      console.log(`___________deployerResponse___________`)
+      initializeAPI("Postman-action-deploy/1.0.0");
+
+      const cred: Credentials = await doLogin(
+        auth_token,
+        fileSystemPersister
+      ).catch((error) => {
+        throw new Error(error.message);
+      });
+      console.log(`___________cred___________`);
+      console.log(cred);
+
+      await nimProjectGenerate(args.collection, api_key, cred.namespace);
+      const deployerResponse = await nimProjectDeploy(args.collection, cred);
+      console.log(`___________deployerResponse___________`);
       console.log(deployerResponse);
       return {
         body: `${args.collection} Deployed!`,
@@ -35,7 +48,11 @@ async function main(args: any) {
   }
 }
 
-async function nimProjectGenerate(collection: string, pm_api_key: string) {
+async function nimProjectGenerate(
+  collection: string,
+  pm_api_key: string,
+  targetNamespace: string
+) {
   const generator = new Generate({
     id: collection,
     key: pm_api_key,
@@ -43,23 +60,27 @@ async function nimProjectGenerate(collection: string, pm_api_key: string) {
     overwrite: true,
     deploy: false,
     deployForce: false,
-    updateSource: false,
+    updateSource: true,
     clientCode: false,
     update: false,
     init: false,
+    targetNamespace,
   });
+
   return generator.generate().catch((error) => {
     throw new Error(error.message);
   });
 }
 
-async function nimProjectDeploy(collection: string, nim_auth_token: string) {
-  const projPath = join(process.cwd(), sanitizeName(collection, '-'))
-  console.log(`___________projPath___________`)
+async function nimProjectDeploy(collection: string, cred: Credentials) {
+  const projPath = join(process.cwd(), sanitizeName(collection, "-"));
+  console.log(`___________projPath___________`);
   console.log(projPath);
+
   if (!existsSync(projPath)) {
-    throw new Error(`Couldn't find project for ${collection}`)
+    throw new Error(`Couldn't find project for ${collection}`);
   }
+
   const flags: Flags = {
     verboseBuild: true,
     verboseZip: false,
@@ -72,16 +93,6 @@ async function nimProjectDeploy(collection: string, nim_auth_token: string) {
     exclude: undefined,
     remoteBuild: false,
   };
-
-  initializeAPI('Postman-action-deploy/1.0.0')
-
-  const cred = await doLogin(nim_auth_token, fileSystemPersister).catch(
-    (error) => {
-      throw new Error(error.message);
-    }
-  );
-  console.log(`___________cred___________`)
-  console.log(cred);
 
   return deployProject(
     projPath,
