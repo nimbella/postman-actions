@@ -120,6 +120,7 @@ function nimProjectDeploy(collection, nim_auth_token) {
                         exclude: undefined,
                         remoteBuild: false
                     };
+                    nimbella_deployer_1.initializeAPI('Postman-action-deploy/1.0.0');
                     return [4 /*yield*/, nimbella_deployer_1.doLogin(nim_auth_token, nimbella_deployer_1.fileSystemPersister)["catch"](function (error) {
                             throw new Error(error.message);
                         })];

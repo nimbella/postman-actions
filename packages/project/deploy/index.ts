@@ -6,6 +6,7 @@ import {
   deployProject,
   doLogin,
   fileSystemPersister,
+  initializeAPI,
 } from "nimbella-deployer";
 
 async function main(args: any) {
@@ -68,6 +69,9 @@ async function nimProjectDeploy(collection: string, nim_auth_token: string) {
     exclude: undefined,
     remoteBuild: false,
   };
+
+  initializeAPI('Postman-action-deploy/1.0.0')
+
   const cred = await doLogin(nim_auth_token, fileSystemPersister).catch(
     (error) => {
       throw new Error(error.message);
