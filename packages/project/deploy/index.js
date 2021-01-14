@@ -42,7 +42,7 @@ var invoker_1 = require("@nimbella/postman-api/lib/invoker");
 var nimbella_deployer_1 = require("nimbella-deployer");
 function main(args) {
     return __awaiter(this, void 0, void 0, function () {
-        var error_1;
+        var deployerResponse, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -53,7 +53,9 @@ function main(args) {
                     _a.sent();
                     return [4 /*yield*/, nimProjectDeploy(args.collection, args.nim_auth_token)];
                 case 2:
-                    _a.sent();
+                    deployerResponse = _a.sent();
+                    console.log("___________deployerResponse___________");
+                    console.log(deployerResponse);
                     return [2 /*return*/, {
                             body: args.collection + " Deployed!"
                         }];
@@ -124,7 +126,7 @@ function nimProjectDeploy(collection, nim_auth_token) {
                 case 1:
                     cred = _a.sent();
                     console.log("___________cred___________");
-                    console.log(JSON.stringify(cred, null, 4));
+                    console.log(cred);
                     return [2 /*return*/, nimbella_deployer_1.deployProject(projPath, cred.ow, cred, nimbella_deployer_1.fileSystemPersister, flags)["catch"](function (error) {
                             throw new Error(error.message);
                         })];

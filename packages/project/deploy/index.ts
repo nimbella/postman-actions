@@ -11,8 +11,10 @@ import {
 async function main(args: any) {
   try {
     if (args.collection && args.pm_api_key && args.nim_auth_token) {
-      await nimGenerate(args.collection, args.pm_api_key);
-      await nimProjectDeploy(args.collection, args.nim_auth_token);
+      await nimGenerate(args.collection, args.pm_api_key)
+      const deployerResponse = await nimProjectDeploy(args.collection, args.nim_auth_token)
+      console.log(`___________deployerResponse___________`)
+      console.log(deployerResponse);
       return {
         body: `${args.collection} Deployed!`,
       };
@@ -48,11 +50,11 @@ async function nimGenerate(collection: string, pm_api_key: string) {
 }
 
 async function nimProjectDeploy(collection: string, nim_auth_token: string) {
-  const projPath = join(process.cwd(), collection);
-  console.log(`___________projPath___________`);
+  const projPath = join(process.cwd(), collection)
+  console.log(`___________projPath___________`)
   console.log(projPath);
   if (!existsSync(projPath)) {
-    throw new Error(`Couldn't find project for ${collection}`);
+    throw new Error(`Couldn't find project for ${collection}`)
   }
   const flags: Flags = {
     verboseBuild: true,
@@ -71,8 +73,8 @@ async function nimProjectDeploy(collection: string, nim_auth_token: string) {
       throw new Error(error.message);
     }
   );
-  console.log(`___________cred___________`);
-  console.log(JSON.stringify(cred, null, 4));
+  console.log(`___________cred___________`)
+  console.log(cred);
 
   return deployProject(
     projPath,
