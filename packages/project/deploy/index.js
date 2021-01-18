@@ -43,30 +43,26 @@ var utils_1 = require("@nimbella/postman-api/lib/utils");
 var nimbella_deployer_1 = require("nimbella-deployer");
 function main(args) {
     return __awaiter(this, void 0, void 0, function () {
-        var api_key, auth_token, cred, deployerResponse, error_1;
+        var pm_api_key, nim_auth_token, cred, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 6, , 7]);
-                    api_key = args.__ow_headers['x-api-key'];
-                    auth_token = args.__ow_headers['x-auth-token'];
-                    if (!(args.collection && api_key && auth_token)) return [3 /*break*/, 4];
-                    nimbella_deployer_1.initializeAPI('Postman-action-deploy/1.0.0');
-                    return [4 /*yield*/, nimbella_deployer_1.doLogin(auth_token, nimbella_deployer_1.fileSystemPersister)["catch"](function (error) {
+                    pm_api_key = args.__ow_headers["pm-api-key"];
+                    nim_auth_token = args.__ow_headers["nim-auth-token"];
+                    if (!(args.collection && pm_api_key && nim_auth_token)) return [3 /*break*/, 4];
+                    nimbella_deployer_1.initializeAPI("Postman-action-deploy/1.0.0");
+                    return [4 /*yield*/, nimbella_deployer_1.doLogin(nim_auth_token, nimbella_deployer_1.fileSystemPersister)["catch"](function (error) {
                             throw new Error(error.message);
                         })];
                 case 1:
                     cred = _a.sent();
-                    console.log("___________cred___________");
-                    console.log(cred);
-                    return [4 /*yield*/, nimProjectGenerate(args.collection, api_key, cred.namespace)];
+                    return [4 /*yield*/, nimProjectGenerate(args.collection, pm_api_key, cred.namespace)];
                 case 2:
                     _a.sent();
                     return [4 /*yield*/, nimProjectDeploy(args.collection, cred)];
                 case 3:
-                    deployerResponse = _a.sent();
-                    console.log("___________deployerResponse___________");
-                    console.log(deployerResponse);
+                    _a.sent();
                     return [2 /*return*/, {
                             body: args.collection + " Deployed!"
                         }];
@@ -112,8 +108,7 @@ function nimProjectDeploy(collection, cred) {
     return __awaiter(this, void 0, void 0, function () {
         var projPath, flags;
         return __generator(this, function (_a) {
-            projPath = path_1.join(process.cwd(), utils_1.sanitizeName(collection, '-'));
-            console.log("___________projPath___________");
+            projPath = path_1.join(process.cwd(), utils_1.sanitizeName(collection, "-"));
             console.log(projPath);
             if (!fs_1.existsSync(projPath)) {
                 throw new Error("Couldn't find project for " + collection);

@@ -13,20 +13,20 @@ import {
 
 async function main(args: any) {
   try {
-    const api_key = args.__ow_headers["x-api-key"];
-    const auth_token = args.__ow_headers["x-auth-token"];
+    const pm_api_key = args.__ow_headers["pm-api-key"];
+    const nim_auth_token = args.__ow_headers["nim-auth-token"];
 
-    if (args.collection && api_key && auth_token) {
+    if (args.collection && pm_api_key && nim_auth_token) {
       initializeAPI("Postman-action-deploy/1.0.0");
 
       const cred: Credentials = await doLogin(
-        auth_token,
+        nim_auth_token,
         fileSystemPersister
       ).catch((error) => {
         throw new Error(error.message);
       });
 
-      await nimProjectGenerate(args.collection, api_key, cred.namespace);
+      await nimProjectGenerate(args.collection, pm_api_key, cred.namespace);
       await nimProjectDeploy(args.collection, cred);
       return {
         body: `${args.collection} Deployed!`,
