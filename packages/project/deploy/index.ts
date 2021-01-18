@@ -25,13 +25,9 @@ async function main(args: any) {
       ).catch((error) => {
         throw new Error(error.message);
       });
-      console.log(`___________cred___________`);
-      console.log(cred);
 
       await nimProjectGenerate(args.collection, api_key, cred.namespace);
-      const deployerResponse = await nimProjectDeploy(args.collection, cred);
-      console.log(`___________deployerResponse___________`);
-      console.log(deployerResponse);
+      await nimProjectDeploy(args.collection, cred);
       return {
         body: `${args.collection} Deployed!`,
       };
@@ -74,7 +70,6 @@ async function nimProjectGenerate(
 
 async function nimProjectDeploy(collection: string, cred: Credentials) {
   const projPath = join(process.cwd(), sanitizeName(collection, "-"));
-  console.log(`___________projPath___________`);
   console.log(projPath);
 
   if (!existsSync(projPath)) {
