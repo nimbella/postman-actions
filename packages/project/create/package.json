@@ -4,6 +4,7 @@
   "description": "Create Nimbella Project",
   "main": "index.js",
   "dependencies": {
-    "generator": "file:./nimbella-plugin-postman-0.1.2.tgz"
+    "@nimbella/postman-api": "0.0.4",
+    "nimbella-deployer": "https://preview-apigcp.nimbella.io/nimbella-deployer.tgz"
   }
 }
