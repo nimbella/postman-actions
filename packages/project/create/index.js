@@ -9,6 +9,8 @@ const {
   initializeAPI,
 } = require("nimbella-deployer");
 
+const languages = ["go", "js", "ts", "py", "java", "swift", "php"];
+
 async function createRepo(repoName, githubToken) {
   try {
     const req = JSON.stringify({
@@ -68,11 +70,16 @@ async function addFileContent(repoName, path, content, githubToken) {
   }
 }
 
-async function nimProjectGenerate(collection, pm_api_key, targetNamespace) {
+async function nimProjectGenerate(
+  collection,
+  language,
+  pm_api_key,
+  targetNamespace
+) {
   const generator = new Generate["default"]({
     id: collection,
     key: pm_api_key,
-    language: "js",
+    language,
     overwrite: true,
     deploy: false,
     deployForce: false,
@@ -117,6 +124,11 @@ async function main(args) {
     const pm_api_key = args.__ow_headers["pm-api-key"];
     const nim_auth_token = args.__ow_headers["nim-auth-token"];
     const gh_access_token = args.__ow_headers["gh-access-token"];
+    const language = args.language || "js";
+    
+    if (!languages.includes(language)) {
+      return { body: `Invalid language parameters` };
+    }
 
     if (args.collection && pm_api_key && gh_access_token) {
       let cred = { namespace: undefined };
@@ -131,6 +143,7 @@ async function main(args) {
 
       await nimProjectGenerate(
         args.collection,
+        language,
         pm_api_key,
         cred.namespace || "-"
       );
