@@ -24,6 +24,9 @@ packages:
     actions:
       - name: create        
         runtime: nodejs:10
+        limits:
+          timeout: 60000
+          memory: 768        
         environment: $(POSTMAN_API_KEY)          
       - name: deploy
         runtime: nodejs:10
